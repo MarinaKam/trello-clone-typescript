@@ -1,1 +1,2 @@
-# trello-clone-typescript
+# typescript-trello-clone
+Full-stack React with Typescript
