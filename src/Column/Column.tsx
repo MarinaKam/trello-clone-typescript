@@ -1,5 +1,5 @@
 import React, { PropsWithChildren } from 'react';
-import {ColumnContainer, ColumnTitle} from './styles';
+import { ColumnContainer, ColumnTitle } from './styles';
 
 interface ColumnProps {
   text: string
