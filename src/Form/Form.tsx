@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useFocus } from '../utils/useFocus';
 import { Button, FormContainer, TextField } from './styles';
 
 interface FormProps {
@@ -7,6 +8,7 @@ interface FormProps {
 
 export const Form = ({ onAdd }: FormProps) => {
   const [ value, setValue ] = useState('');
+  const inputRef = useFocus();
 
   const handleTextField = (event: any) => {
     setValue(event.target.value);
@@ -18,7 +20,7 @@ export const Form = ({ onAdd }: FormProps) => {
 
   return (
     <FormContainer>
-      <TextField value={value} onChange={handleTextField} />
+      <TextField ref={inputRef} value={value} onChange={handleTextField} />
 
       <Button onClick={handleAddValue}>
         Create
