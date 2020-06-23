@@ -1,5 +1,5 @@
 import React from 'react';
-import {Card, Column} from './Column';
+import { Card, Column } from './Column';
 import { AppContainer } from './styles';
 
 export const App = () => {
