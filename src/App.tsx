@@ -5,16 +5,16 @@ import { AddItem } from './Form/AddItem';
 import { useAppState } from './AppProvider';
 
 export const App = () => {
-  const { state: { lists } } = useAppState();
+  const { state: { lists }, createList } = useAppState();
 
   return (
     <AppContainer>
-      {lists?.map((item, i) => (
-        <Column key={item.id} text={item.text} index={i}/>
+      {lists?.map((list, i) => (
+        <Column id={list.id} key={list.id} text={list.text} index={i}/>
       ))}
 
       <AddItem
-        onAdd={console.log}
+        onAdd={createList}
         toggleButtonText="+ Add another list"
       />
     </AppContainer>

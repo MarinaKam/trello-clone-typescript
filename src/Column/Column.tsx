@@ -6,11 +6,12 @@ import { ColumnContainer, ColumnTitle } from './styles';
 
 interface ColumnProps {
   text: string,
-  index: number
+  index: number,
+  id: string
 }
 
-export const Column = ({ text, index }: ColumnProps) => {
-  const { state: { lists } } = useAppState();
+export const Column = ({ text, id, index }: ColumnProps) => {
+  const { state: { lists }, createTask } = useAppState();
 
   return (
     <ColumnContainer>
@@ -22,7 +23,7 @@ export const Column = ({ text, index }: ColumnProps) => {
 
       <AddItem
         dark
-        onAdd={console.log}
+        onAdd={(text) => createTask(text, id)}
         toggleButtonText="+ Add another task"
       />
     </ColumnContainer>
