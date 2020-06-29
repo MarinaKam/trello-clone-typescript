@@ -1,19 +1,31 @@
-import React, { PropsWithChildren } from 'react';
-import { ColumnContainer, ColumnTitle } from './styles';
+import React from 'react';
 import { AddItem } from '../Form/AddItem';
+import { useAppState } from '../AppProvider';
+import { Card } from './Card';
+import { ColumnContainer, ColumnTitle } from './styles';
 
 interface ColumnProps {
-  text: string
+  text: string,
+  index: number,
+  id: string
 }
 
-export const Column = ({ text, children }: PropsWithChildren<ColumnProps>) => {
+export const Column = ({ text, id, index }: ColumnProps) => {
+  const { state: { lists }, createTask } = useAppState();
+
   return (
     <ColumnContainer>
       <ColumnTitle>{text}</ColumnTitle>
 
-      {children}
+      {lists[index]?.tasks?.map((task) => (
+        <Card key={task.id} text={task.text} />
+      ))}
 
-      <AddItem dark onAdd={console.log} toggleButtonText="+ Add another task" />
+      <AddItem
+        dark
+        onAdd={(text) => createTask(text, id)}
+        toggleButtonText="+ Add another task"
+      />
     </ColumnContainer>
   );
 };
