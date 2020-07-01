@@ -4,7 +4,7 @@ import { AppState } from './data';
 import * as types from './types';
 import { moveItem } from '../helpers';
 
-type Action =
+export type Action =
   | {
       type: types.ADD_LIST,
       payload: string
