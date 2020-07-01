@@ -1,12 +1,15 @@
 import React, { createContext, useContext, useReducer } from 'react';
+import { DragItem } from '../DragItem';
 import { AppState, data } from './data';
 import { reducer } from './reducer';
 import * as types from './types';
 
 interface AppContextProps {
   state: AppState,
-  createList: (text: string) => undefined | void,
-  createTask: (text: string, id: string) => void | undefined,
+  createList(text: string): void,
+  createTask(text: string, id: string): void,
+  onDragItem(item: DragItem | undefined): () => void,
+  onResetDragItem(): void,
 }
 
 export const AppContext = createContext<AppContextProps>({} as AppContextProps);
@@ -24,12 +27,22 @@ export const AppProvider = ({ children }: React.PropsWithChildren<{}>) => {
     dispatch({ type: types.ADD_TASK, payload: { text, taskId: id } });
   };
 
+  const onDragItem = (item: DragItem) => () => {
+    dispatch({ type: types.SET_DRAGGED_ITEM, payload: item });
+  };
+
+  const onResetDragItem = () => {
+    dispatch({ type: types.SET_DRAGGED_ITEM, payload: undefined });
+  };
+
   const providerValue = {
     state,
 
     // functions
     createList,
-    createTask
+    createTask,
+    onDragItem,
+    onResetDragItem
   };
 
   return (

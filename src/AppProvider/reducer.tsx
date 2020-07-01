@@ -3,6 +3,7 @@ import { findItemById } from '../utils';
 import { AppState } from './data';
 import * as types from './types';
 import { moveItem } from '../helpers';
+import { DragItem } from '../DragItem';
 
 export type Action =
   | {
@@ -14,12 +15,16 @@ export type Action =
       payload: { text: string; taskId: string }
     }
   | {
-    type: types.MOVE_LIST,
-    payload: {
-      dragIndex: number,
-      hoverIndex: number
+      type: types.MOVE_LIST,
+      payload: {
+        dragIndex: number,
+        hoverIndex: number
+      }
     }
-  };
+  | {
+      type: types.SET_DRAGGED_ITEM,
+      payload: DragItem | undefined
+    };
 
 export const reducer = (state: AppState, action: Action) => {
   switch (action.type) {
@@ -48,6 +53,12 @@ export const reducer = (state: AppState, action: Action) => {
       state.lists = moveItem(state.lists, dragIndex, hoverIndex);
 
       return { ...state };
+
+    case types.SET_DRAGGED_ITEM:
+      return {
+        ...state,
+        draggedItem: action.payload
+      }
 
     default:
       return state;
