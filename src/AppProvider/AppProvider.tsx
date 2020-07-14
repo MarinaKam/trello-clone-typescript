@@ -10,6 +10,7 @@ interface AppContextProps {
   createTask(text: string, id: string): void,
   onDragItem(item: DragItem | undefined): () => void,
   onResetDragItem(): void,
+  moveList(dragIndex: number, hoverIndex: number): void
 }
 
 export const AppContext = createContext<AppContextProps>({} as AppContextProps);
@@ -35,6 +36,10 @@ export const AppProvider = ({ children }: React.PropsWithChildren<{}>) => {
     dispatch({ type: types.SET_DRAGGED_ITEM, payload: undefined });
   };
 
+  const moveList = (dragIndex: number, hoverIndex: number) => {
+    dispatch({ type: types.MOVE_LIST, payload: { dragIndex, hoverIndex }});
+  };
+
   const providerValue = {
     state,
 
@@ -42,7 +47,8 @@ export const AppProvider = ({ children }: React.PropsWithChildren<{}>) => {
     createList,
     createTask,
     onDragItem,
-    onResetDragItem
+    onResetDragItem,
+    moveList
   };
 
   return (
