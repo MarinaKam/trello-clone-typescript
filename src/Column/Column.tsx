@@ -11,34 +11,41 @@ import { ColumnContainer, ColumnTitle } from './styles';
 interface ColumnProps {
   text: string,
   index: number,
-  id: string
+  id: string,
+  isPreview?: boolean
 }
 
-export const Column = ({ text, id, index }: ColumnProps) => {
+export const Column = ({ isPreview, text, id, index }: ColumnProps) => {
   const { state: { lists, ...state }, createTask, moveList } = useAppState();
   const ref = useRef<HTMLDivElement>(null);
-  const { drag } = useItemDrag({ type: types.COLUMN, text, id, index });
   const [ , drop ] = useDrop({
     accept: types.COLUMN,
     hover(item: DragItem) {
-      const dragIndex = item.index;
-      const hoverIndex = index;
+      if (item.type === types.COLUMN) {
+        const dragIndex = item.index;
+        const hoverIndex = index;
 
-      if (dragIndex === hoverIndex) {
-        return;
+        if (dragIndex === hoverIndex) {
+          return;
+        }
+
+        moveList(dragIndex, hoverIndex);
+        item.index = hoverIndex;
       }
-
-      moveList(dragIndex, hoverIndex);
-      item.index = hoverIndex;
     }
   });
+  const { drag } = useItemDrag({ type: types.COLUMN, text, id, index });
 
   useEffect(() => {
     drag(drop(ref));
   }, [ drag, drop ]);
 
   return (
-    <ColumnContainer ref={ref} isHidden={isHidden(state.draggedItem, types.COLUMN, id)}>
+    <ColumnContainer
+      ref={ref}
+      isPreview={isPreview}
+      isHidden={isHidden(isPreview, state.draggedItem, types.COLUMN, id)}
+    >
       <ColumnTitle>{text}</ColumnTitle>
 
       {lists[index]?.tasks?.map((task) => (

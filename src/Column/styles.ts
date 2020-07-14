@@ -1,11 +1,13 @@
 import styled from 'styled-components';
 
 interface DragPreviewContainerProps {
-  isHidden?: boolean
+  isHidden?: boolean,
+  isPreview?: boolean
 }
 
 export const DragPreviewContainer = styled.div<DragPreviewContainerProps>`
-  opacity: ${(props) => (props.isHidden ? 0.3 : 1)}
+  transform: ${props => (props.isPreview ? 'rotate(1deg)' : undefined)};
+  opacity: ${props => (props.isHidden ? 0 : 1)};
 `;
 
 export const ColumnContainer = styled(DragPreviewContainer)`
@@ -16,6 +18,7 @@ export const ColumnContainer = styled(DragPreviewContainer)`
   border-radius: 3px;
   padding: 8px 8px;
   flex-grow: 0;
+  flex-shrink: 0;
 `;
 
 export const ColumnTitle = styled.div`
