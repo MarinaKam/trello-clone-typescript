@@ -2,8 +2,10 @@ import { v4 as uuidv4 } from 'uuid';
 import { findItemById } from '../utils';
 import { AppState } from './data';
 import * as types from './types';
+import { moveItem } from '../helpers';
+import { DragItem } from '../DragItem';
 
-type Action =
+export type Action =
   | {
       type: types.ADD_LIST,
       payload: string
@@ -11,6 +13,17 @@ type Action =
   | {
       type: types.ADD_TASK,
       payload: { text: string; taskId: string }
+    }
+  | {
+      type: types.MOVE_LIST,
+      payload: {
+        dragIndex: number,
+        hoverIndex: number
+      }
+    }
+  | {
+      type: types.SET_DRAGGED_ITEM,
+      payload: DragItem | undefined
     };
 
 export const reducer = (state: AppState, action: Action) => {
@@ -32,9 +45,20 @@ export const reducer = (state: AppState, action: Action) => {
         text: action.payload.text
       });
 
+      return { ...state };
+
+    case types.MOVE_LIST:
+      const { dragIndex, hoverIndex } = action.payload;
+
+      state.lists = moveItem(state.lists, dragIndex, hoverIndex);
+
+      return { ...state };
+
+    case types.SET_DRAGGED_ITEM:
       return {
-        ...state
-      };
+        ...state,
+        draggedItem: action.payload
+      }
 
     default:
       return state;

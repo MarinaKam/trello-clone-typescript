@@ -1,3 +1,5 @@
+import { DragItem } from '../DragItem';
+
 interface Task {
   id: string,
   text: string
@@ -10,10 +12,12 @@ interface List {
 }
 
 export interface AppState {
+  draggedItem: DragItem | undefined
   lists: List[]
 }
 
 export const data: AppState = {
+  draggedItem: undefined,
   lists: [
     {
       id: "0",
