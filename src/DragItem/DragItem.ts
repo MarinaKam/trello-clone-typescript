@@ -5,6 +5,14 @@ export type ColumnDragItem = {
   id: string,
   text: string,
   type: types.COLUMN
-}
+};
 
-export type DragItem = ColumnDragItem;
+export type CardDragItem = {
+  index: number,
+  id: string,
+  columnId: string,
+  text: string,
+  type: types.CARD
+};
+
+export type DragItem = CardDragItem | ColumnDragItem;

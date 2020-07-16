@@ -16,10 +16,15 @@ interface ColumnProps {
 }
 
 export const Column = ({ isPreview, text, id, index }: ColumnProps) => {
-  const { state: { lists, ...state }, createTask, moveList } = useAppState();
+  const {
+    state: { lists, ...state },
+    createTask,
+    moveList,
+    moveTask
+  } = useAppState();
   const ref = useRef<HTMLDivElement>(null);
   const [ , drop ] = useDrop({
-    accept: types.COLUMN,
+    accept: [ types.COLUMN, types.CARD ],
     hover(item: DragItem) {
       if (item.type === types.COLUMN) {
         const dragIndex = item.index;
@@ -29,8 +34,23 @@ export const Column = ({ isPreview, text, id, index }: ColumnProps) => {
           return;
         }
 
-        moveList(dragIndex, hoverIndex);
+        moveList({ dragIndex, hoverIndex });
+
         item.index = hoverIndex;
+      } else {
+        const dragIndex = item.index;
+        const hoverIndex = 0;
+        const sourceColumn = item.columnId;
+        const targetColumn = id;
+
+        if (sourceColumn === targetColumn) {
+          return;
+        }
+
+        moveTask({ dragIndex, hoverIndex, sourceColumn, targetColumn });
+
+        item.index = hoverIndex;
+        item.columnId = targetColumn;
       }
     }
   });
@@ -48,8 +68,14 @@ export const Column = ({ isPreview, text, id, index }: ColumnProps) => {
     >
       <ColumnTitle>{text}</ColumnTitle>
 
-      {lists[index]?.tasks?.map((task) => (
-        <Card key={task.id} text={task.text} />
+      {lists[index]?.tasks?.map((task, i) => (
+        <Card
+          key={task.id}
+          text={task.text}
+          id={task.id}
+          index={i}
+          columnId={id}
+        />
       ))}
 
       <AddItem

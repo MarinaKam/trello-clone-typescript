@@ -4,13 +4,26 @@ import { AppState, data } from './data';
 import { reducer } from './reducer';
 import * as types from './types';
 
+export type MoveListProps = {
+  dragIndex: number,
+  hoverIndex: number
+};
+
+export type MoveTaskProps = {
+  dragIndex: number,
+  hoverIndex: number,
+  sourceColumn: string,
+  targetColumn: string
+};
+
 interface AppContextProps {
   state: AppState,
   createList(text: string): void,
   createTask(text: string, id: string): void,
   onDragItem(item: DragItem | undefined): () => void,
   onResetDragItem(): void,
-  moveList(dragIndex: number, hoverIndex: number): void
+  moveList(item: MoveListProps): void,
+  moveTask(item: MoveTaskProps): void
 }
 
 export const AppContext = createContext<AppContextProps>({} as AppContextProps);
@@ -36,8 +49,12 @@ export const AppProvider = ({ children }: React.PropsWithChildren<{}>) => {
     dispatch({ type: types.SET_DRAGGED_ITEM, payload: undefined });
   };
 
-  const moveList = (dragIndex: number, hoverIndex: number) => {
-    dispatch({ type: types.MOVE_LIST, payload: { dragIndex, hoverIndex }});
+  const moveList = (item: MoveListProps) => {
+    dispatch({ type: types.MOVE_LIST, payload: item });
+  };
+
+  const moveTask = (item: MoveTaskProps) => {
+    dispatch({ type: types.MOVE_TASK, payload: item });
   };
 
   const providerValue = {
@@ -48,6 +65,7 @@ export const AppProvider = ({ children }: React.PropsWithChildren<{}>) => {
     createTask,
     onDragItem,
     onResetDragItem,
+    moveTask,
     moveList
   };
 
